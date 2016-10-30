@@ -5,6 +5,13 @@ install: true
 script:
 - true
 before_deploy:
+- openssl aes-256-cbc -k $travis_key_password -in travis-deploy-key.enc -out travis-deploy-key
+  -d
+- chmod 600 travis-deploy-key
+- eval `ssh-agent -s`
+- ssh-add travis-deploy-key
+- git config --global user.name "Travis CI"
+- git config --global user.email "retail-ui-publish-bot@skbkontur.ru"
 - cd docs
 - npm install
 - ./deploy.sh
